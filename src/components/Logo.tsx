@@ -1,54 +1,100 @@
-import { motion } from 'motion/react';
+import { useState } from 'react';
 
-export default function Logo({ className = "h-8", showText = true }: { className?: string, showText?: boolean }) {
+export default function Logo({ className = "h-8" }: { className?: string }) {
+  const [error, setError] = useState(false);
+
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      <svg viewBox="0 0 100 100" className="h-full w-auto overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Abstract "S" Shape (Midnight style) */}
-        <path 
-          d="M70 20 C 30 20, 20 50, 50 50 C 80 50, 70 80, 30 80" 
-          stroke="white" 
-          strokeWidth="8" 
-          strokeLinecap="round" 
-          strokeOpacity="0.1"
+    <div className={`flex items-center justify-center ${className}`}>
+      {!error ? (
+        <img 
+          src="https://cdn.builder.io/api/v1/image/assets/5874400e238d436a87c672b1d0356cda/9817757b32254350993952f99589dfbe" 
+          alt="Inflection Partners" 
+          className="h-full w-auto block select-none object-contain transition-all duration-700 hover:scale-105"
+          style={{ 
+            filter: 'contrast(1.1) brightness(1.05) drop-shadow(0 0 8px rgba(45, 212, 191, 0.3))',
+            imageRendering: 'auto'
+          }}
+          onError={() => setError(true)}
+          referrerPolicy="no-referrer"
         />
-        
-        {/* Teal Swoop */}
-        <motion.path 
-          d="M20 80 Q 40 75, 65 30" 
-          stroke="#14b8a6" 
-          strokeWidth="6" 
-          strokeLinecap="round"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        />
-        
-        {/* Brain Circuit Node */}
-        <motion.g
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
+      ) : (
+        <svg 
+          viewBox="0 0 400 620" 
+          className="h-full w-auto overflow-visible select-none" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid meet"
+          shapeRendering="geometricPrecision"
+          role="img"
+          aria-label="Inflection Partners Logo"
         >
-          <circle cx="65" cy="30" r="10" fill="#14b8a6" fillOpacity="0.2" />
-          <circle cx="65" cy="30" r="4" fill="#14b8a6" />
-          
-          {/* Circuit Lines */}
-          <path d="M65 30 L 75 25" stroke="#14b8a6" strokeWidth="1.5" />
-          <path d="M65 30 L 75 35" stroke="#14b8a6" strokeWidth="1.5" />
-          <path d="M65 30 L 55 25" stroke="#14b8a6" strokeWidth="1.5" />
-          
-          {/* Glow Effect */}
-          <circle cx="65" cy="30" r="6" className="animate-pulse" stroke="#14b8a6" strokeWidth="1" strokeOpacity="0.5" />
-        </motion.g>
-      </svg>
-      
-      {showText && (
-        <div className="flex flex-col justify-center">
-          <span className="text-white font-bold text-xl tracking-tight leading-none">Inflection</span>
-          <span className="text-brand-accent font-bold text-[8px] uppercase tracking-[0.4em] leading-none mt-1">Partners</span>
-        </div>
+          <defs>
+            <radialGradient id="bg-glow" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stopColor="#14b8a6">
+                <animate attributeName="stop-opacity" values="0.25;0.15;0.25" dur="5s" repeatCount="indefinite" />
+              </stop>
+              <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+            </radialGradient>
+            
+            <linearGradient id="s-navy" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#1e40af" />
+              <stop offset="100%" stopColor="#0f172a" />
+            </linearGradient>
+
+            <linearGradient id="teal-swoosh" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#0d9488" />
+              <stop offset="100%" stopColor="#2dd4bf" />
+            </linearGradient>
+
+            <filter id="glow-filter" x="-200%" y="-200%" width="500%" height="500%" colorInterpolationFilters="sRGB">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur">
+                <animate attributeName="stdDeviation" values="8;36;8" dur="3s" repeatCount="indefinite" />
+              </feGaussianBlur>
+              <feFlood floodColor="#2dd4bf" result="flood">
+                <animate attributeName="flood-color" values="#2dd4bf;#14b8a6;#2dd4bf" dur="6s" repeatCount="indefinite" />
+                <animate attributeName="flood-opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" />
+              </feFlood>
+              <feComposite in="flood" in2="blur" operator="in" result="glow" />
+              <feComponentTransfer in="glow" result="intense-glow">
+                <feFuncA type="linear" slope="2" />
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode in="intense-glow" />
+                <feMergeNode in="intense-glow" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <g className="logo-content" transform="translate(0, 20)">
+            <g className="logo-mark">
+              <circle cx="200" cy="280" r="280" fill="url(#bg-glow)" opacity="0.4" />
+              <path 
+                d="M280 120 C 120 120, 80 280, 200 280 C 320 280, 280 440, 120 440" 
+                stroke="url(#s-navy)" 
+                strokeWidth="65" 
+                strokeLinecap="round" 
+              />
+              <path 
+                d="M80 440 C 150 420, 220 300, 260 180" 
+                stroke="url(#teal-swoosh)" 
+                strokeWidth="38" 
+                strokeLinecap="round" 
+                filter="url(#glow-filter)" 
+              />
+              <circle cx="260" cy="180" r="40" fill="#2dd4bf" opacity="0.8" filter="url(#glow-filter)">
+                <animate attributeName="opacity" values="0.8;0.4;0.8" dur="4s" repeatCount="indefinite" />
+              </circle>
+            </g>
+
+            <g transform="translate(0, 520)" className="logo-text">
+               <text x="200" y="0" textAnchor="middle" fill="#fff" fontSize="85" fontWeight="900" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>Inflection</text>
+               <text x="200" y="75" textAnchor="middle" fill="#fff" opacity="0.6" fontSize="35" fontWeight="700" letterSpacing="18" style={{ fontFamily: 'Inter, sans-serif' }}>PARTNERS</text>
+            </g>
+          </g>
+        </svg>
       )}
     </div>
   );
 }
+

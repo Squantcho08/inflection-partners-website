@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { ChevronRight } from 'lucide-react';
 import StatCounter from '../components/StatCounter';
 
@@ -135,10 +136,14 @@ export default function Economics() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {ROI_INSIGHTS.map((insight, i) => (
-              <div key={i} className="p-10 bg-white/[0.02] border border-white/5 rounded-xl shadow-sm hover:border-brand-accent/20 transition-all">
-                <h4 className="text-xs font-bold text-white/50 uppercase tracking-widest mb-6">{insight.domain}</h4>
+              <motion.div 
+                key={i} 
+                whileHover={{ scale: 1.02, translateY: -5 }}
+                className="p-10 bg-white/[0.02] border border-white/5 rounded-xl shadow-sm hover:border-brand-accent/40 hover:bg-white/[0.04] transition-all cursor-default group"
+              >
+                <h4 className="text-xs font-bold text-white/50 uppercase tracking-widest mb-6 group-hover:text-white transition-colors">{insight.domain}</h4>
                 <div className="mb-8">
-                  <span className="text-5xl font-extrabold text-white block mb-2">
+                  <span className="text-5xl font-extrabold text-white block mb-2 group-hover:text-brand-accent transition-colors">
                     <StatCounter value={insight.stat} />
                   </span>
                   <span className="text-xs font-bold text-brand-accent uppercase tracking-wider">{insight.sub}</span>
@@ -147,11 +152,11 @@ export default function Economics() {
                   {insight.points.map((point, j) => (
                     <li key={j} className="flex items-start gap-3">
                       <ChevronRight className="w-4 h-4 text-brand-accent shrink-0 mt-0.5" />
-                      <span className="text-sm text-brand-text/70 font-medium">{point}</span>
+                      <span className="text-sm text-brand-text/70 font-medium group-hover:text-brand-text transition-colors">{point}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

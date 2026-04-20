@@ -1,21 +1,54 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Menu, X, ArrowRight, Linkedin } from 'lucide-react';
 import Logo from './Logo';
 
 const NAV_LINKS = [
-  { name: "Horizon", href: "/" },
-  { name: "Approach", href: "/approach" },
-  { name: "Execution", href: "/execution" },
-  { name: "Economics", href: "/economics" },
-  { name: "Contact", href: "/contact" }
+  { name: "Perspective", href: "/" },
+  { name: "Execution", href: "/approach" },
+  { name: "Economics", href: "/economics" }
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 100 } },
+  exit: { opacity: 0, x: 20 }
+};
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -52,9 +85,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="fixed top-0 w-full z-50 px-6 py-4"
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center glass rounded-xl px-8 py-4 shadow-sm">
-          <Link to="/">
-            <Logo className="h-10" />
+        <div className="max-w-7xl mx-auto flex justify-between items-center glass rounded-xl px-8 py-4 shadow-sm relative z-50">
+          <Link to="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+            <Logo className="h-20" />
           </Link>
           
           <div className="hidden md:flex items-center gap-10">
@@ -79,58 +112,93 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
 
           <button 
-            className="md:hidden"
+            className="md:hidden text-white p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X /> : <Menu />}
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </motion.nav>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed inset-0 z-40 bg-brand-primary pt-24 px-6 md:hidden"
-        >
-          <div className="flex flex-col gap-6">
-            {NAV_LINKS.map((link) => (
-              <NavLink 
-                key={link.name} 
-                to={link.href} 
-                className={({ isActive }) => 
-                  `text-2xl font-display font-light ${isActive ? 'text-brand-accent' : 'text-white'}`
-                }
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </NavLink>
-            ))}
-            <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
-              <button className="w-full bg-brand-accent text-white py-4 rounded-xl font-bold">
-                Get Started
-              </button>
-            </Link>
-          </div>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-brand-primary/95 backdrop-blur-xl md:hidden"
+          >
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              className="flex flex-col h-full pt-32 pb-12 px-10"
+            >
+              <div className="space-y-8">
+                {NAV_LINKS.map((link) => (
+                  <motion.div key={link.name} variants={itemVariants}>
+                    <NavLink 
+                      to={link.href} 
+                      className={({ isActive }) => 
+                        `group flex items-center justify-between text-4xl font-sans font-extrabold tracking-tighter ${isActive ? 'text-brand-accent' : 'text-white'}`
+                      }
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span>{link.name}</span>
+                      <ArrowRight className="w-6 h-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-brand-accent" />
+                    </NavLink>
+                  </motion.div>
+                ))}
+              </div>
 
-      <main className="pt-28">
+              <div className="mt-auto space-y-8">
+                <motion.div variants={itemVariants}>
+                  <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+                    <button className="w-full bg-brand-accent text-white py-5 rounded-xl font-bold uppercase tracking-widest text-xs shadow-xl shadow-brand-accent/20">
+                      Get Started
+                    </button>
+                  </Link>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="flex justify-between items-end border-t border-white/10 pt-8">
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-mono text-white/30 uppercase tracking-[0.2em]">Social</p>
+                    <a 
+                      href="https://www.linkedin.com/company/inflection-partners-ai/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex items-center gap-2 text-white/60 hover:text-brand-accent transition-colors font-bold text-sm"
+                    >
+                      <Linkedin size={16} />
+                      LinkedIn
+                    </a>
+                  </div>
+                  
+                  <p className="text-[10px] text-white/20 font-mono tracking-widest uppercase text-right max-w-[150px]">
+                    © 2026 INFLECTION PARTNERS.
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <main className="pt-32">
         {children}
       </main>
 
       {/* Footer */}
       <footer className="py-24 px-6 border-t border-white/5 bg-brand-primary">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <Link to="/">
-            <Logo className="h-12" />
+          <Link to="/" className="flex items-center">
+            <Logo className="h-24" />
           </Link>
           
           <div className="flex gap-8 text-sm font-medium text-white/40">
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">X</a>
-            <a href="#" className="hover:text-white transition-colors">Intelligence</a>
+            <a href="https://www.linkedin.com/company/inflection-partners-ai/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
           </div>
 

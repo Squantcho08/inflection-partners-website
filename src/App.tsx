@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Approach from './pages/Approach';
-import Execution from './pages/Execution';
 import Economics from './pages/Economics';
 import Contact from './pages/Contact';
 
@@ -34,7 +33,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/approach" element={<Approach />} />
-          <Route path="/execution" element={<Execution />} />
+          <Route path="/execution" element={<Navigate to="/approach" replace />} />
           <Route path="/economics" element={<Economics />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
