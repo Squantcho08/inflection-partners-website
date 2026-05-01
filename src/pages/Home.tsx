@@ -116,7 +116,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">What comes next</span>
+              <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">The Velocity Gap</span>
               <h2 className="text-5xl font-sans font-extrabold tracking-tighter mb-8 leading-[1.1] text-white">
                 Modern operations require a new approach.
               </h2>

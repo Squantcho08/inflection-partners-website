@@ -37,7 +37,7 @@ export default function Economics() {
       <section className="py-24 px-6 bg-brand-primary text-white overflow-hidden border-b border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">The numbers</span>
+            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">Capital Efficiency</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The move pays for itself.</h2>
             <p className="text-xl text-white/60 max-w-2xl mt-6">
               Moving to an AI-based model fixes your bottom line. The savings from being more efficient pay for the new technology you need to stay ahead.
@@ -130,7 +130,7 @@ export default function Economics() {
       <section id="insights" className="py-24 px-6 bg-brand-paper">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">The Math</span>
+            <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">ROI Analysis</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight text-white">Where AI is working right now.</h2>
           </div>
 

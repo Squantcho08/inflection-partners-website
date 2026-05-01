@@ -26,13 +26,13 @@ const containerVariants = {
       staggerDirection: -1
     }
   }
-};
+} as const;
 
 const itemVariants = {
   hidden: { opacity: 0, x: -20 },
   show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 100 } },
   exit: { opacity: 0, x: 20 }
-};
+} as const;
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -91,7 +91,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       >
         <div className={`max-w-7xl mx-auto flex justify-between items-center glass rounded-xl px-8 shadow-sm relative z-50 transition-all duration-500 ${isScrolled ? 'py-1.5 shadow-2xl bg-brand-primary/90' : 'py-2.5'}`}>
           <Link to="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
-            <Logo className={`transition-all duration-500 ${isScrolled ? 'h-10 md:h-12' : 'h-18 md:h-22'}`} />
+            <Logo className={`transition-all duration-500 ${isScrolled ? 'h-14 md:h-16' : 'h-32 md:h-36'}`} />
           </Link>
           
           <div className="hidden md:flex items-center gap-10">
@@ -100,7 +100,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 key={link.name} 
                 to={link.href} 
                 className={({ isActive }) => 
-                  `text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                  `text-[12px] font-bold uppercase tracking-widest transition-colors ${
                     isActive ? 'text-brand-accent underline underline-offset-8' : 'text-brand-text/70 hover:text-brand-accent'
                   }`
                 }
@@ -109,7 +109,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </NavLink>
             ))}
             <Link to="/contact">
-              <button className={`bg-brand-accent text-white px-5 rounded-md text-[10px] font-bold uppercase tracking-[0.15em] hover:brightness-110 transition-all shadow-lg shadow-brand-accent/20 ${isScrolled ? 'py-2' : 'py-2.5'}`}>
+              <button className={`bg-brand-accent text-white px-6 rounded-md text-[12px] font-bold uppercase tracking-[0.15em] hover:brightness-110 transition-all shadow-lg shadow-brand-accent/20 ${isScrolled ? 'py-2.5' : 'py-3'}`}>
                 Get Started
               </button>
             </Link>

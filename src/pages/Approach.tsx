@@ -17,7 +17,7 @@ export default function Approach() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid md:grid-cols-2 gap-20 items-center">
             <div>
-              <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">Our Identity</span>
+              <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">Operator DNA</span>
               <h1 className="text-5xl md:text-7xl font-sans font-extrabold tracking-tighter mb-8 leading-[1.05]">
                 Execution Partners,<br /><span className="text-brand-accent">not just advisors.</span>
               </h1>
@@ -83,50 +83,6 @@ export default function Approach() {
       <section className="py-24 px-6 bg-brand-primary relative border-t border-white/5">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="mb-16">
-            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">The Market Context</span>
-            <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The divide in competitiveness.</h2>
-            <p className="text-xl text-white/60 max-w-3xl mt-6 font-light leading-relaxed">
-              We are seeing a clear split in how companies grow. Modern leaders win by moving faster, while those stuck with manual processes face higher costs and slower delivery times.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 text-left">
-            <div className="p-10 rounded-2xl bg-white/5 border border-white/10 opacity-60">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-white/10 rounded-lg">
-                  <div className="w-6 h-6 border-2 border-dashed border-white rounded-full opacity-40 shrink-0" />
-                </div>
-                <h3 className="text-2xl font-bold text-white/40 uppercase tracking-tighter">Manual Processes</h3>
-              </div>
-              <ul className="space-y-4 text-white/40 font-light italic text-sm">
-                <li>• Adding headcount is the only way to scale</li>
-                <li>• Decisions get stuck in manual approval loops</li>
-                <li>• Fragmented data slows down every workflow</li>
-              </ul>
-            </div>
-
-            <div className="p-10 rounded-2xl bg-brand-accent/5 border border-brand-accent/20 relative overflow-hidden ring-1 ring-brand-accent/20 shadow-2xl">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="p-3 bg-brand-accent/20 rounded-lg text-brand-accent">
-                  <Layers className="w-6 h-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-brand-accent uppercase tracking-tighter">AI-Enabled Speed</h3>
-              </div>
-              <ul className="space-y-4 text-white font-medium text-sm">
-                <li>• Scale operations without proportional hiring</li>
-                <li>• Automated systems handle routine delivery</li>
-                <li>• Clearer data visibility for faster decisions</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Bifurcation / Advantage Section - Moved up to set context */}
-      <section className="py-24 px-6 bg-brand-primary relative border-t border-white/5">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="mb-16">
-            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">The Market Context</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The divide in competitiveness.</h2>
             <p className="text-xl text-white/60 max-w-3xl mt-6 font-light leading-relaxed">
               We are seeing a clear split in how companies grow. Modern leaders win by moving faster, while those stuck with manual processes face higher costs and slower delivery times.
@@ -178,7 +134,7 @@ export default function Approach() {
           >
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-brand-accent/20 bg-brand-accent/5 text-brand-accent font-mono text-[10px] font-bold uppercase tracking-[0.25em]">
               <div className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse shadow-[0_0_8px_rgba(45,212,191,0.5)]" />
-              Our Mission
+              Core Mandate
             </div>
             
             <div className="relative">
@@ -196,7 +152,7 @@ export default function Approach() {
       <section className="py-24 px-6 border-y border-white/5 bg-brand-paper">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">Phase-by-Phase</span>
+            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">Operational Protocol</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight text-white">The Path to Delivery.</h2>
           </div>
 

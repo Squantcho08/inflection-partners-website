@@ -54,7 +54,7 @@ export default function Contact() {
             {/* Ambient background glow for card */}
             <div className="absolute -top-24 -left-24 w-64 h-64 bg-brand-accent/20 blur-[100px] rounded-full group-hover:bg-brand-accent/30 transition-all duration-1000" />
             
-            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.3em] uppercase mb-8 block underline underline-offset-8">Contact</span>
+            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.3em] uppercase mb-8 block underline underline-offset-8">Deployment</span>
             
             {!submitted ? (
               <>
@@ -128,7 +128,7 @@ export default function Contact() {
             viewport={{ once: true }}
             className="p-8 border-l border-brand-accent/20"
           >
-            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Base Operations</h4>
+            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Physical Base</h4>
             <p className="text-2xl text-white font-extrabold tracking-tight">Austin, TX</p>
             <p className="text-sm text-white/40 mt-2 font-light">Supporting global transformation from the heart of Texas.</p>
           </motion.div>
@@ -140,7 +140,7 @@ export default function Contact() {
             transition={{ delay: 0.1 }}
             className="p-8 border-l border-brand-accent/20"
           >
-            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Intelligence Inquiries</h4>
+            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Strategic Intake</h4>
             <a href="mailto:hello@inflectionpartners.io" className="text-2xl text-white font-extrabold tracking-tight hover:text-brand-accent transition-colors block">
               hello@inflectionpartners.io
             </a>
@@ -154,7 +154,7 @@ export default function Contact() {
             transition={{ delay: 0.2 }}
             className="p-8 border-l border-brand-accent/20"
           >
-            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Neural Network</h4>
+            <h4 className="font-mono text-brand-accent text-[10px] font-extrabold uppercase tracking-widest mb-4">Public Network</h4>
             <div className="flex flex-col gap-2">
               <a 
                 href="https://www.linkedin.com/company/inflection-partners-ai/" 
