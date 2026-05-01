@@ -35,9 +35,16 @@ export default function Contact() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        // Use the specific error message from the server if available
-        throw new Error(errorData.error || 'Failed to transmit inquiry. Please check your configuration.');
+        let errorMsg = 'The inquiry server is currently unavailable.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) {
+          const text = await response.text().catch(() => 'No response body');
+          console.error('[Contact Form Error] Non-JSON response:', text);
+          errorMsg = `Server Error (${response.status}): ${text.slice(0, 50)}...`;
+        }
+        throw new Error(errorMsg);
       }
 
       setSubmitted(true);

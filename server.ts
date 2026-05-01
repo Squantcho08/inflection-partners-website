@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
@@ -45,6 +46,7 @@ async function startServer() {
     }
 
     try {
+      console.log(`[Contact API] Attempting to send email via Resend to hello@inflectionpartners.io`);
       const { data, error } = await resend.emails.send({
         from: 'Inflection Partners <onboarding@resend.dev>',
         to: ['hello@inflectionpartners.io'],
@@ -60,19 +62,20 @@ async function startServer() {
       });
 
       if (error) {
-        console.error('[Resend Error]', error);
+        console.error('[Resend API Error]', error);
         return res.status(500).json({ 
-          error: `Resend Error: ${error.message || 'Unknown error'}. Note: onboard@resend.dev only sends to your own registered email by default.`,
-          details: error
+          error: `Resend Error: ${error.name || 'API_ERROR'} - ${error.message || 'Unknown error'}`,
+          details: error 
         });
       }
 
       console.log('[Resend Success]', data);
-      res.json({ success: true, message: "Inquiry received successfully." });
+      return res.json({ success: true, message: "Inquiry received successfully." });
     } catch (err) {
-      console.error('[Email Exception]', err);
+      console.error('[Resend Exception]', err);
+      const errorMessage = err instanceof Error ? err.message : String(err);
       return res.status(500).json({ 
-        error: "The email service encountered an internal failure." 
+        error: `Inquiry Transmission Failure: ${errorMessage}` 
       });
     }
   });
