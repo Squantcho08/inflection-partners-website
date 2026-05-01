@@ -26,61 +26,59 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // 1. Mandatory Middleware
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-  // Contact API Route
+  // 2. PRIMARY API ROUTES (Directly on app for maximum priority)
+  app.get("/api/health", (req, res) => res.status(200).json({ status: "ok", env: process.env.NODE_ENV }));
+  
+  app.get("/api/contact/check", (req, res) => {
+    res.json({ status: "API Reachable", timestamp: new Date().toISOString() });
+  });
+
   app.post("/api/contact", async (req, res) => {
     const { email, message } = req.body;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    console.log(`[API] Received inquiry from: ${email}`);
 
-    if (!email || !emailRegex.test(email)) {
-      return res.status(400).json({ error: "A valid email is required" });
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "A valid email is required." });
     }
 
     const resend = getResend();
-    
     if (!resend) {
-      return res.status(500).json({ 
-        error: "RESEND_API_KEY is not configured in environment variables." 
-      });
+      console.error('[API] RESEND_API_KEY is missing from environment.');
+      return res.status(500).json({ error: "Email service not configured on server." });
     }
 
     try {
-      console.log(`[Contact API] Attempting to send email via Resend to hello@inflectionpartners.io`);
       const { data, error } = await resend.emails.send({
         from: 'Inflection Partners <onboarding@resend.dev>',
         to: ['hello@inflectionpartners.io'],
-        subject: `New Operator Inquiry: ${email}`,
-        text: `
-          New inquiry received from Inflection Partners website.
-          
-          Sender: ${email}
-          Inquiry Details: ${message || 'No description provided.'}
-          
-          Timestamp: ${new Date().toISOString()}
-        `,
+        subject: `Inquiry: ${email}`,
+        text: `From: ${email}\n\nMessage:\n${message || 'No description provided.'}\n\nSent: ${new Date().toISOString()}`,
       });
 
       if (error) {
         console.error('[Resend API Error]', error);
-        return res.status(500).json({ 
-          error: `Resend Error: ${error.name || 'API_ERROR'} - ${error.message || 'Unknown error'}`,
-          details: error 
-        });
+        return res.status(500).json({ error: error.message || "Resend failed to send." });
       }
 
-      console.log('[Resend Success]', data);
-      return res.json({ success: true, message: "Inquiry received successfully." });
+      console.log('[API] Email sent successfully');
+      return res.status(200).json({ success: true });
     } catch (err) {
-      console.error('[Resend Exception]', err);
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      return res.status(500).json({ 
-        error: `Inquiry Transmission Failure: ${errorMessage}` 
-      });
+      console.error('[Server Exception]', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      return res.status(500).json({ error: `Server delivery failure: ${msg}` });
     }
   });
 
-  // Vite integration
+  // 3. Fallback for any other /api/* routes to prevent SPA hijacking
+  app.all("/api/*", (req, res) => {
+    res.status(404).json({ error: "API route not found" });
+  });
+
+  // 4. VITE / STATIC CONTENT (Must come AFTER API routes)
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },

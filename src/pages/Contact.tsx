@@ -30,19 +30,25 @@ export default function Contact() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({ email, message }),
       });
 
       if (!response.ok) {
-        let errorMsg = 'The inquiry server is currently unavailable.';
+        let errorMsg = 'The inquiry service is currently unavailable.';
         try {
-          const errorData = await response.json();
-          errorMsg = errorData.error || errorMsg;
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json();
+            errorMsg = errorData.error || errorMsg;
+          } else {
+            const text = await response.text();
+            console.error('[Contact API Error] Non-JSON response:', text);
+            errorMsg = `Server Connection Issue (${response.status}). Please try again later.`;
+          }
         } catch (e) {
-          const text = await response.text().catch(() => 'No response body');
-          console.error('[Contact Form Error] Non-JSON response:', text);
-          errorMsg = `Server Error (${response.status}): ${text.slice(0, 50)}...`;
+          errorMsg = `Network Error (${response.status}).`;
         }
         throw new Error(errorMsg);
       }
