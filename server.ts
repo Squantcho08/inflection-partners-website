@@ -2,9 +2,24 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import { Resend } from 'resend';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Lazy initialization of Resend
+let resendClient: Resend | null = null;
+function getResend() {
+  if (!resendClient) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.warn("RESEND_API_KEY is not set. Emails will be logged but not sent.");
+      return null;
+    }
+    resendClient = new Resend(apiKey);
+  }
+  return resendClient;
+}
 
 async function startServer() {
   const app = express();
@@ -14,23 +29,56 @@ async function startServer() {
 
   // Contact API Route
   app.post("/api/contact", async (req, res) => {
-    const { email } = req.body;
+    const { email, message } = req.body;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!email) {
-      return res.status(400).json({ error: "Email is required" });
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({ error: "A valid email is required" });
     }
 
-    console.log(`[Contact Form] Received inquiry from: ${email}`);
+    console.log(`[Contact Form] Processing inquiry from: ${email}`);
     
-    // NOTE: In a real production environment, you would integrate 
-    // a service like Resend, SendGrid, or AWS SES here.
-    // Example logic:
-    // await sendEmail({ to: 'hello@inflectionpartners.io', subject: 'New Lead', body: email });
+    const resend = getResend();
+    
+    if (resend) {
+      try {
+        const { data, error } = await resend.emails.send({
+          from: 'Inflection Partners <onboarding@resend.dev>', // Resend's default free-tier sender
+          to: ['hello@inflectionpartners.io'],
+          subject: `New Operator Inquiry: ${email}`,
+          text: `
+            New inquiry received from Inflection Partners website.
+            
+            Sender: ${email}
+            Inquiry Details: ${message || 'No description provided.'}
+            
+            Timestamp: ${new Date().toISOString()}
+          `,
+        });
 
-    // For now, we simulate a successful send
-    setTimeout(() => {
-      res.json({ success: true, message: "Inquiry received successfully." });
-    }, 800);
+        if (error) {
+          console.error('[Resend Error]', error);
+          return res.status(500).json({ 
+            error: error.message || "Failed to transmit inquiry.",
+            details: error
+          });
+        }
+
+        console.log('[Resend Success]', data);
+      } catch (err) {
+        console.error('[Email Exception]', err);
+        return res.status(500).json({ error: "Internal transmission error." });
+      }
+    } else {
+      // Fallback for when API Key is missing (dev/preview)
+      console.log('--- EMAIL LOG (No API Key) ---');
+      console.log(`To: hello@inflectionpartners.io`);
+      console.log(`From: ${email}`);
+      console.log(`Message: ${message}`);
+      console.log('------------------------------');
+    }
+
+    res.json({ success: true, message: "Inquiry received successfully." });
   });
 
   // Vite integration

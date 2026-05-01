@@ -36,16 +36,27 @@ export default function Economics() {
     <div className="bg-brand-paper pt-20">
       <section className="py-24 px-6 bg-brand-primary text-white overflow-hidden border-b border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-16"
+          >
             <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">Capital Efficiency</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The move pays for itself.</h2>
             <p className="text-xl text-white/60 max-w-2xl mt-6">
               Moving to an AI-based model fixes your bottom line. The savings from being more efficient pay for the new technology you need to stay ahead.
             </p>
-          </div>
+          </motion.div>
 
           {/* Cost Structure Table/Cards */}
-          <div className="relative group">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1 }}
+            className="relative group"
+          >
             {/* Desktop Grid View */}
             <div className="hidden lg:block overflow-x-auto pb-6 scrollbar-hide">
               <div className="min-w-[1000px]">
@@ -107,37 +118,59 @@ export default function Economics() {
                 <ChevronRight className="w-3 h-3" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           <div className="mt-16 grid md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-xl bg-white/5 border border-white/10">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8 }}
+              className="p-8 rounded-xl bg-white/5 border border-white/10"
+            >
               <h4 className="text-lg font-bold mb-4">Reinvesting for growth</h4>
               <p className="text-sm text-white/50 leading-relaxed">
                 An AI-based model lets you run a different kind of company. The money you save by cleaning up old workflows pays for the change, letting you grow from a position of strength.
               </p>
-            </div>
-            <div className="p-8 rounded-xl bg-brand-accent/10 border border-brand-accent/20">
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="p-8 rounded-xl bg-brand-accent/10 border border-brand-accent/20"
+            >
               <h4 className="text-lg font-bold mb-4 text-brand-accent">Sustainable Lead</h4>
               <p className="text-sm text-white/70 leading-relaxed">
                 Companies that move first can use their savings to build better products and pay their best people more. If you wait, you're stuck with old costs while your competitors move ahead.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Results Section */}
+        {/* Results Section */}
       <section id="insights" className="py-24 px-6 bg-brand-paper">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
             <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">ROI Analysis</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight text-white">Where AI is working right now.</h2>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {ROI_INSIGHTS.map((insight, i) => (
               <motion.div 
                 key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
                 whileHover={{ scale: 1.02, translateY: -5 }}
                 className="p-10 bg-white/[0.02] border border-white/5 rounded-xl shadow-sm hover:border-brand-accent/40 hover:bg-white/[0.04] transition-all cursor-default group"
               >

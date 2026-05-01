@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import Approach from './pages/Approach';
-import Economics from './pages/Economics';
-import Contact from './pages/Contact';
+
+// Lazy load page components
+const Home = lazy(() => import('./pages/Home'));
+const Approach = lazy(() => import('./pages/Approach'));
+const Economics = lazy(() => import('./pages/Economics'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -25,17 +27,25 @@ function ScrollToTop() {
   return null;
 }
 
+const PageLoader = () => (
+  <div className="min-h-[50vh] flex items-center justify-center">
+    <div className="w-8 h-8 border-2 border-brand-accent/20 border-t-brand-accent rounded-full animate-spin" />
+  </div>
+);
+
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
       <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/approach" element={<Approach />} />
-          <Route path="/economics" element={<Economics />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/approach" element={<Approach />} />
+            <Route path="/economics" element={<Economics />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Suspense>
       </Layout>
     </Router>
   );

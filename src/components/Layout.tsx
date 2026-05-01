@@ -1,8 +1,9 @@
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useRef } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ArrowRight, Linkedin } from 'lucide-react';
 import Logo from './Logo';
+import Lenis from 'lenis';
 
 const NAV_LINKS = [
   { name: "Perspective", href: "/" },
@@ -39,12 +40,39 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    // Initialize Lenis for smooth scrolling
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+    });
+
+    lenisRef.current = lenis;
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
+      lenisRef.current?.stop();
     } else {
       document.body.style.overflow = 'unset';
+      lenisRef.current?.start();
     }
     return () => {
       document.body.style.overflow = 'unset';

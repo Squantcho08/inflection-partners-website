@@ -37,9 +37,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
           <div className="flex-1 text-center md:text-left">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <h1 className="text-7xl md:text-8xl font-sans font-extrabold leading-[1.0] tracking-[-0.06em] mb-8 text-white">
                 Value creation <br className="hidden lg:block" />
@@ -65,9 +65,9 @@ export default function Home() {
 
           <div className="flex-1 relative w-full aspect-square md:aspect-auto">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-10 grid grid-cols-2 gap-4"
             >
               <motion.div 
@@ -77,6 +77,7 @@ export default function Home() {
                 <motion.img 
                   src="https://picsum.photos/seed/architecture-minimal/800/1000" 
                   alt="AI-Native Architecture" 
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-110 transition-all duration-700"
                   whileHover={{ scale: 1.1, filter: "grayscale(0) brightness(1.1) contrast(1.1)" }}
                   transition={{ duration: 0.4 }}
@@ -95,6 +96,7 @@ export default function Home() {
                   <motion.img 
                     src="https://picsum.photos/seed/execution-fast/800/1000" 
                     alt="Operational Delivery" 
+                    loading="lazy"
                     className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-110 transition-all duration-700"
                     whileHover={{ scale: 1.1, filter: "grayscale(0) brightness(1.1) contrast(1.1)" }}
                     transition={{ duration: 0.4 }}
@@ -114,7 +116,13 @@ export default function Home() {
       {/* Next Section */}
       <section className="py-24 px-6 bg-brand-primary overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="grid md:grid-cols-2 gap-16 items-center"
+          >
             <div>
               <span className="font-mono text-brand-accent text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">The Velocity Gap</span>
               <h2 className="text-5xl font-sans font-extrabold tracking-tighter mb-8 leading-[1.1] text-white">
@@ -138,7 +146,13 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-6">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.2, staggerChildren: 0.1 }}
+              className="grid grid-cols-1 gap-6"
+            >
               {[
                 { 
                   title: "Real Efficiency", 
@@ -156,7 +170,14 @@ export default function Home() {
                   icon: <BarChart3 className="w-5 h-5 text-brand-accent" />
                 }
               ].map((item, i) => (
-                <div key={i} className="p-8 border border-white/5 rounded-xl bg-white/[0.02] hover:border-brand-accent/30 group transition-all duration-300">
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 + 0.3 }}
+                  className="p-8 border border-white/5 rounded-xl bg-white/[0.02] hover:border-brand-accent/30 group transition-all duration-300"
+                >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="p-2 bg-brand-primary rounded-lg border border-white/5 group-hover:bg-brand-accent group-hover:text-white transition-colors">
                       {item.icon}
@@ -164,10 +185,10 @@ export default function Home() {
                     <h3 className="font-bold text-white text-xl leading-tight">{item.title}</h3>
                   </div>
                   <p className="text-brand-text opacity-60 leading-relaxed font-light">{item.desc}</p>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

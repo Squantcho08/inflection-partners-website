@@ -4,13 +4,23 @@ import { CheckCircle2 } from 'lucide-react';
 
 export default function Contact() {
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
+
+    if (!validateEmail(email)) {
+      setError('Please enter a valid work email address.');
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -21,11 +31,12 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, message }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send inquiry. Please try again.');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send inquiry. Please try again.');
       }
 
       setSubmitted(true);
@@ -67,16 +78,28 @@ export default function Contact() {
                 </p>
                 
                 <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 relative z-10">
-                  <div className="relative">
-                    <input 
-                      type="email" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Work Email" 
-                      className="w-full px-8 py-5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-accent focus:bg-white/[0.08] transition-all disabled:opacity-50"
-                      required
-                      disabled={loading}
-                    />
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <input 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Work Email" 
+                        className="w-full px-8 py-5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-accent focus:bg-white/[0.08] transition-all disabled:opacity-50"
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                    <div className="relative">
+                      <textarea 
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Briefly describe your inquiry..." 
+                        rows={3}
+                        className="w-full px-8 py-5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-accent focus:bg-white/[0.08] transition-all disabled:opacity-50 resize-none"
+                        disabled={loading}
+                      />
+                    </div>
                   </div>
                   {error && (
                     <p className="text-red-400 text-xs font-mono text-center">{error}</p>
@@ -91,7 +114,7 @@ export default function Contact() {
                         <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         Processing...
                       </>
-                    ) : 'Start Transformation'}
+                    ) : 'Start Your Transformation'}
                   </button>
                 </form>
               </>

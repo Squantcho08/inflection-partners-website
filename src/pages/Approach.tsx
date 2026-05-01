@@ -16,7 +16,11 @@ export default function Approach() {
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid md:grid-cols-2 gap-20 items-center">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
               <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-6 block underline underline-offset-8">Operator DNA</span>
               <h1 className="text-5xl md:text-7xl font-sans font-extrabold tracking-tighter mb-8 leading-[1.05]">
                 Execution Partners,<br /><span className="text-brand-accent">not just advisors.</span>
@@ -43,7 +47,7 @@ export default function Approach() {
                   <span className="font-bold flex items-center gap-2">Ground-Up Efficiency <Layers className="w-4 h-4 text-brand-accent" /></span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <motion.div style={{ y: yParallax }} className="relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 relative group bg-black/40 cursor-pointer shadow-2xl">
@@ -61,6 +65,7 @@ export default function Approach() {
                 <motion.img 
                   src="https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80&w=1200&h=1600" 
                   alt="Abstract AI Nodes" 
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale opacity-40 mix-blend-overlay group-hover:opacity-100 transition-all duration-700"
                   whileHover={{ scale: 1.05, filter: "grayscale(0) brightness(1.1) contrast(1.1)" }}
                   referrerPolicy="no-referrer"
@@ -82,15 +87,27 @@ export default function Approach() {
       {/* Bifurcation / Advantage Section - Moved up to set context */}
       <section className="py-24 px-6 bg-brand-primary relative border-t border-white/5">
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-16"
+          >
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The divide in competitiveness.</h2>
             <p className="text-xl text-white/60 max-w-3xl mt-6 font-light leading-relaxed">
               We are seeing a clear split in how companies grow. Modern leaders win by moving faster, while those stuck with manual processes face higher costs and slower delivery times.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 text-left">
-            <div className="p-10 rounded-2xl bg-white/5 border border-white/10 opacity-60">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8 }}
+              className="p-10 rounded-2xl bg-white/5 border border-white/10 opacity-60"
+            >
               <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-white/10 rounded-lg">
                   <div className="w-6 h-6 border-2 border-dashed border-white rounded-full opacity-40 shrink-0" />
@@ -102,9 +119,15 @@ export default function Approach() {
                 <li>• Decisions get stuck in manual approval loops</li>
                 <li>• Fragmented data slows down every workflow</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="p-10 rounded-2xl bg-brand-accent/5 border border-brand-accent/20 relative overflow-hidden ring-1 ring-brand-accent/20 shadow-2xl">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8 }}
+              className="p-10 rounded-2xl bg-brand-accent/5 border border-brand-accent/20 relative overflow-hidden ring-1 ring-brand-accent/20 shadow-2xl"
+            >
               <div className="flex items-center gap-4 mb-8">
                 <div className="p-3 bg-brand-accent/20 rounded-lg text-brand-accent">
                   <Layers className="w-6 h-6" />
@@ -116,7 +139,7 @@ export default function Approach() {
                 <li>• Automated systems handle routine delivery</li>
                 <li>• Clearer data visibility for faster decisions</li>
               </ul>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -149,12 +172,18 @@ export default function Approach() {
       </section>
 
       {/* Execution Roadmap Section */}
-      <section className="py-24 px-6 border-y border-white/5 bg-brand-paper">
+      <section className="py-24 px-6 border-y border-white/5 bg-brand-paper transition-all">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
             <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">Operational Protocol</span>
             <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight text-white">The Path to Delivery.</h2>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -201,7 +230,13 @@ export default function Approach() {
 
       {/* Summary / Call to Action */}
       <section className="py-24 px-6 border-t border-white/5 bg-brand-primary/50">
-        <div className="max-w-4xl mx-auto text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="max-w-4xl mx-auto text-center"
+        >
           <h2 className="text-4xl font-sans font-extrabold mb-12 tracking-tight text-white">The outcome: A more efficient way to work.</h2>
           <div className="grid md:grid-cols-3 gap-12 text-left">
             <div className="p-6 border-l border-brand-accent/30">
@@ -217,7 +252,7 @@ export default function Approach() {
               <p className="text-sm opacity-60 font-light text-white/70">Building systems that handle the heavy lifting so you can grow.</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
