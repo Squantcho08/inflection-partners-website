@@ -8,13 +8,24 @@ This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/8698094a-640e-494e-8f52-e220b29ad674
 
-## Run Locally
+## Environment Variables
 
-**Prerequisites:**  Node.js
+This app requires the following environment variables to function properly, especially for the contact form:
 
+- `RESEND_API_KEY`: Your API key from [Resend](https://resend.com).
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Local Setup
+Create a `.env` file in the root directory and add your key:
+```env
+RESEND_API_KEY=your_key_here
+```
+
+### Production Deployment (Vercel/Render/etc.)
+1. **Security**: Never commit your `.env` file to GitHub.
+2. **Setup**: Go to your hosting provider's dashboard (e.g., Vercel Settings > Environment Variables).
+3. **Add Key**: Add `RESEND_API_KEY` with your actual secret value.
+4. **Redeploy**: Trigger a new deployment for the changes to take effect.
+
+## Custom Server
+This app uses a custom Express + Vite server (`server.ts`). Ensure your hosting provider is configured to run the `start` script:
+`npm run start` (which runs `tsx server.ts`)

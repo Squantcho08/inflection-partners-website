@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from "express";
+import cors from "cors";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -27,58 +28,70 @@ async function startServer() {
   const PORT = 3000;
 
   // 1. Mandatory Middleware
+  app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // 2. PRIMARY API ROUTES (Directly on app for maximum priority)
-  app.get("/api/health", (req, res) => res.status(200).json({ status: "ok", env: process.env.NODE_ENV }));
-  
-  app.get("/api/contact/check", (req, res) => {
-    res.json({ status: "API Reachable", timestamp: new Date().toISOString() });
+  // STARTUP LOGGING
+  console.log(`[Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`[Startup] API Key present: ${!!process.env.RESEND_API_KEY}`);
+
+  // 2. PRIMARY API ROUTES
+  const apiRouter = express.Router();
+
+  // Root health check for the 전체 API
+  apiRouter.get("/health", (req, res) => {
+    res.json({ 
+      status: "API_ONLINE", 
+      time: new Date().toISOString(),
+      key_configured: !!process.env.RESEND_API_KEY 
+    });
   });
 
-  app.post("/api/contact", async (req, res) => {
-    const { email, message } = req.body;
-    console.log(`[API] Received inquiry from: ${email}`);
+  apiRouter.all("/contact", async (req, res) => {
+    console.log(`[API] ${req.method} request to /api/contact`);
+    
+    if (req.method !== 'POST') {
+      return res.status(200).json({ message: "Endpoint active. Please use POST." });
+    }
 
+    const { email, message } = req.body;
+    
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: "A valid email is required." });
     }
 
     const resend = getResend();
     if (!resend) {
-      console.error('[API] RESEND_API_KEY is missing from environment.');
-      return res.status(500).json({ error: "Email service not configured on server." });
+      console.error('[API] Contact failed: RESEND_API_KEY not found');
+      return res.status(500).json({ error: "Server email service not configured." });
     }
 
     try {
       const { data, error } = await resend.emails.send({
         from: 'Inflection Partners <onboarding@resend.dev>',
         to: ['hello@inflectionpartners.io'],
-        subject: `Inquiry: ${email}`,
-        text: `From: ${email}\n\nMessage:\n${message || 'No description provided.'}\n\nSent: ${new Date().toISOString()}`,
+        subject: `New Inquiry: ${email}`,
+        text: `From: ${email}\n\nMessage:\n${message || 'N/A'}`,
       });
 
       if (error) {
-        console.error('[Resend API Error]', error);
-        return res.status(500).json({ error: error.message || "Resend failed to send." });
+        console.error('[Resend Error]', error);
+        return res.status(500).json({ error: error.message });
       }
 
       console.log('[API] Email sent successfully');
       return res.status(200).json({ success: true });
     } catch (err) {
       console.error('[Server Exception]', err);
-      const msg = err instanceof Error ? err.message : 'Unknown error';
-      return res.status(500).json({ error: `Server delivery failure: ${msg}` });
+      return res.status(500).json({ error: "Internal delivery failure" });
     }
   });
 
-  // 3. Fallback for any other /api/* routes to prevent SPA hijacking
-  app.all("/api/*", (req, res) => {
-    res.status(404).json({ error: "API route not found" });
-  });
+  // Mount API router FIRST
+  app.use("/api", apiRouter);
 
-  // 4. VITE / STATIC CONTENT (Must come AFTER API routes)
+  // 3. VITE / STATIC CONTENT
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
