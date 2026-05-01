@@ -36,49 +36,45 @@ async function startServer() {
       return res.status(400).json({ error: "A valid email is required" });
     }
 
-    console.log(`[Contact Form] Processing inquiry from: ${email}`);
-    
     const resend = getResend();
     
-    if (resend) {
-      try {
-        const { data, error } = await resend.emails.send({
-          from: 'Inflection Partners <onboarding@resend.dev>', // Resend's default free-tier sender
-          to: ['hello@inflectionpartners.io'],
-          subject: `New Operator Inquiry: ${email}`,
-          text: `
-            New inquiry received from Inflection Partners website.
-            
-            Sender: ${email}
-            Inquiry Details: ${message || 'No description provided.'}
-            
-            Timestamp: ${new Date().toISOString()}
-          `,
-        });
-
-        if (error) {
-          console.error('[Resend Error]', error);
-          return res.status(500).json({ 
-            error: error.message || "Failed to transmit inquiry.",
-            details: error
-          });
-        }
-
-        console.log('[Resend Success]', data);
-      } catch (err) {
-        console.error('[Email Exception]', err);
-        return res.status(500).json({ error: "Internal transmission error." });
-      }
-    } else {
-      // Fallback for when API Key is missing (dev/preview)
-      console.log('--- EMAIL LOG (No API Key) ---');
-      console.log(`To: hello@inflectionpartners.io`);
-      console.log(`From: ${email}`);
-      console.log(`Message: ${message}`);
-      console.log('------------------------------');
+    if (!resend) {
+      return res.status(500).json({ 
+        error: "RESEND_API_KEY is not configured in environment variables." 
+      });
     }
 
-    res.json({ success: true, message: "Inquiry received successfully." });
+    try {
+      const { data, error } = await resend.emails.send({
+        from: 'Inflection Partners <onboarding@resend.dev>',
+        to: ['hello@inflectionpartners.io'],
+        subject: `New Operator Inquiry: ${email}`,
+        text: `
+          New inquiry received from Inflection Partners website.
+          
+          Sender: ${email}
+          Inquiry Details: ${message || 'No description provided.'}
+          
+          Timestamp: ${new Date().toISOString()}
+        `,
+      });
+
+      if (error) {
+        console.error('[Resend Error]', error);
+        return res.status(500).json({ 
+          error: `Resend Error: ${error.message || 'Unknown error'}. Note: onboard@resend.dev only sends to your own registered email by default.`,
+          details: error
+        });
+      }
+
+      console.log('[Resend Success]', data);
+      res.json({ success: true, message: "Inquiry received successfully." });
+    } catch (err) {
+      console.error('[Email Exception]', err);
+      return res.status(500).json({ 
+        error: "The email service encountered an internal failure." 
+      });
+    }
   });
 
   // Vite integration

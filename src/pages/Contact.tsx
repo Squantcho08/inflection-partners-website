@@ -36,7 +36,8 @@ export default function Contact() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to send inquiry. Please try again.');
+        // Use the specific error message from the server if available
+        throw new Error(errorData.error || 'Failed to transmit inquiry. Please check your configuration.');
       }
 
       setSubmitted(true);
@@ -102,7 +103,16 @@ export default function Contact() {
                     </div>
                   </div>
                   {error && (
-                    <p className="text-red-400 text-xs font-mono text-center">{error}</p>
+                    <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+                      <p className="text-red-400 text-xs font-mono text-center leading-relaxed">
+                        {error}
+                        {error.includes('RESEND_API_KEY') && (
+                          <span className="block mt-2 opacity-80 underline underline-offset-4">
+                            Ensure the API key is set in your environment settings.
+                          </span>
+                        )}
+                      </p>
+                    </div>
                   )}
                   <button 
                     type="submit" 
