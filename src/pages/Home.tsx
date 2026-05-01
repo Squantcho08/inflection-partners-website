@@ -3,6 +3,28 @@ import { ArrowRight, Zap, Target, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import StatCounter from '../components/StatCounter';
 
+const SERVICES = [
+  {
+    icon: <Cpu className="w-6 h-6" />,
+    title: "AI Integration",
+    description: "Putting AI to work where it actually makes a difference in your day-to-day operations."
+  },
+  {
+    icon: <Target className="w-6 h-6" />,
+    title: "Process Redesign",
+    description: "Cleaning up old workflows and building them around results rather than traditional constraints."
+  },
+  {
+    icon: <BarChart3 className="w-6 h-6" />,
+    title: "Operations Strategy",
+    description: "Building a company that's faster and more efficient by design, using AI as the foundation."
+  }
+];
+
+function Cpu({ className }: { className?: string }) {
+  return <Zap className={className} />;
+}
+
 export default function Home() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, -50]);

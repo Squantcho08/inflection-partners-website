@@ -37,6 +37,7 @@ const itemVariants = {
 export default function Layout({ children }: { children: ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
@@ -55,6 +56,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       if (typeof window !== 'undefined') {
         const currentScrollY = window.scrollY;
         
+        // Check if scrolled past a threshold to shrink
+        setIsScrolled(currentScrollY > 20);
+
         // Always show at the top
         if (currentScrollY < 100) {
           setIsVisible(true);
@@ -81,13 +85,13 @@ export default function Layout({ children }: { children: ReactNode }) {
       {/* Navigation */}
       <motion.nav 
         initial={{ y: 0 }}
-        animate={{ y: isVisible ? 0 : -120 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed top-0 w-full z-50 px-6 py-4"
+        animate={{ y: isVisible ? 0 : -250 }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className={`fixed top-0 w-full z-50 px-6 transition-all duration-500 ${isScrolled ? 'py-1' : 'py-2'}`}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center glass rounded-xl px-8 py-4 shadow-sm relative z-50">
+        <div className={`max-w-7xl mx-auto flex justify-between items-center glass rounded-xl px-8 shadow-sm relative z-50 transition-all duration-500 ${isScrolled ? 'py-1.5 shadow-2xl bg-brand-primary/90' : 'py-2.5'}`}>
           <Link to="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
-            <Logo className="h-20" />
+            <Logo className={`transition-all duration-500 ${isScrolled ? 'h-10 md:h-12' : 'h-18 md:h-22'}`} />
           </Link>
           
           <div className="hidden md:flex items-center gap-10">
@@ -96,7 +100,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 key={link.name} 
                 to={link.href} 
                 className={({ isActive }) => 
-                  `text-xs font-bold uppercase tracking-widest transition-colors ${
+                  `text-[10px] font-bold uppercase tracking-widest transition-colors ${
                     isActive ? 'text-brand-accent underline underline-offset-8' : 'text-brand-text/70 hover:text-brand-accent'
                   }`
                 }
@@ -105,7 +109,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </NavLink>
             ))}
             <Link to="/contact">
-              <button className="bg-brand-accent text-white px-6 py-3 rounded-md text-[11px] font-bold uppercase tracking-[0.15em] hover:brightness-110 transition-all shadow-lg shadow-brand-accent/20">
+              <button className={`bg-brand-accent text-white px-5 rounded-md text-[10px] font-bold uppercase tracking-[0.15em] hover:brightness-110 transition-all shadow-lg shadow-brand-accent/20 ${isScrolled ? 'py-2' : 'py-2.5'}`}>
                 Get Started
               </button>
             </Link>
@@ -186,7 +190,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         )}
       </AnimatePresence>
 
-      <main className="pt-32">
+      <main className="pt-28 md:pt-32">
         {children}
       </main>
 
@@ -194,7 +198,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="py-24 px-6 border-t border-white/5 bg-brand-primary">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <Link to="/" className="flex items-center">
-            <Logo className="h-24" />
+            <Logo className="h-32 md:h-40" />
           </Link>
           
           <div className="flex gap-8 text-sm font-medium text-white/40">

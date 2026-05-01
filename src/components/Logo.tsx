@@ -7,15 +7,13 @@ export default function Logo({ className = "h-8" }: { className?: string }) {
     <div className={`flex items-center justify-center ${className}`}>
       {!error ? (
         <img 
-          src="https://cdn.builder.io/api/v1/image/assets/5874400e238d436a87c672b1d0356cda/9817757b32254350993952f99589dfbe" 
+          src="/logo.png?v=2" 
           alt="Inflection Partners" 
           className="h-full w-auto block select-none object-contain transition-all duration-700 hover:scale-105"
           style={{ 
-            filter: 'contrast(1.1) brightness(1.05) drop-shadow(0 0 8px rgba(45, 212, 191, 0.3))',
             imageRendering: 'auto'
           }}
           onError={() => setError(true)}
-          referrerPolicy="no-referrer"
         />
       ) : (
         <svg 
@@ -28,6 +26,7 @@ export default function Logo({ className = "h-8" }: { className?: string }) {
           role="img"
           aria-label="Inflection Partners Logo"
         >
+          {/* ... existing SVG content ... */}
           <defs>
             <radialGradient id="bg-glow" cx="50%" cy="40%" r="60%">
               <stop offset="0%" stopColor="#14b8a6">

@@ -122,6 +122,49 @@ export default function Approach() {
         </div>
       </section>
 
+      {/* Bifurcation / Advantage Section - Moved up to set context */}
+      <section className="py-24 px-6 bg-brand-primary relative border-t border-white/5">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="mb-16">
+            <span className="font-mono text-brand-accent text-[10px] font-extrabold tracking-[0.2em] uppercase mb-4 block underline underline-offset-8">The Market Context</span>
+            <h2 className="text-4xl md:text-6xl font-sans font-extrabold tracking-tight">The divide in competitiveness.</h2>
+            <p className="text-xl text-white/60 max-w-3xl mt-6 font-light leading-relaxed">
+              We are seeing a clear split in how companies grow. Modern leaders win by moving faster, while those stuck with manual processes face higher costs and slower delivery times.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 text-left">
+            <div className="p-10 rounded-2xl bg-white/5 border border-white/10 opacity-60">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-white/10 rounded-lg">
+                  <div className="w-6 h-6 border-2 border-dashed border-white rounded-full opacity-40 shrink-0" />
+                </div>
+                <h3 className="text-2xl font-bold text-white/40 uppercase tracking-tighter">Manual Processes</h3>
+              </div>
+              <ul className="space-y-4 text-white/40 font-light italic text-sm">
+                <li>• Adding headcount is the only way to scale</li>
+                <li>• Decisions get stuck in manual approval loops</li>
+                <li>• Fragmented data slows down every workflow</li>
+              </ul>
+            </div>
+
+            <div className="p-10 rounded-2xl bg-brand-accent/5 border border-brand-accent/20 relative overflow-hidden ring-1 ring-brand-accent/20 shadow-2xl">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-brand-accent/20 rounded-lg text-brand-accent">
+                  <Layers className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-brand-accent uppercase tracking-tighter">AI-Enabled Speed</h3>
+              </div>
+              <ul className="space-y-4 text-white font-medium text-sm">
+                <li>• Scale operations without proportional hiring</li>
+                <li>• Automated systems handle routine delivery</li>
+                <li>• Clearer data visibility for faster decisions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Philosophy / Mission Section */}
       <section className="py-24 px-6 bg-brand-primary relative overflow-hidden border-t border-white/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(45,212,191,0.03)_0%,transparent_70%)] pointer-events-none" />

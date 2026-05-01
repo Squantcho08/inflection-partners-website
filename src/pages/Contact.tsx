@@ -5,17 +5,35 @@ import { CheckCircle2 } from 'lucide-react';
 export default function Contact() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
-    // Tie to email via mailto
-    const subject = encodeURIComponent("Strategic Transformation Inquiry");
-    const body = encodeURIComponent(`Hello Inflection Partners,\n\nI am interested in starting a transformation audit for my organization. My work email is: ${email}\n\nPlease reach out to me with next steps.`);
-    window.location.href = `mailto:hello@inflectionpartners.io?subject=${subject}&body=${body}`;
-    
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send inquiry. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,12 +73,25 @@ export default function Contact() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Work Email" 
-                      className="w-full px-8 py-5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-accent focus:bg-white/[0.08] transition-all"
+                      className="w-full px-8 py-5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-brand-accent focus:bg-white/[0.08] transition-all disabled:opacity-50"
                       required
+                      disabled={loading}
                     />
                   </div>
-                  <button type="submit" className="w-full px-12 py-5 bg-brand-accent text-white rounded-xl font-bold text-[13px] uppercase tracking-[0.2em] hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-brand-accent/20">
-                    Start Transformation
+                  {error && (
+                    <p className="text-red-400 text-xs font-mono text-center">{error}</p>
+                  )}
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full px-12 py-5 bg-brand-accent text-white rounded-xl font-bold text-[13px] uppercase tracking-[0.2em] hover:brightness-110 active:scale-[0.98] transition-all shadow-xl shadow-brand-accent/20 disabled:scale-100 disabled:brightness-75 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  >
+                    {loading ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Processing...
+                      </>
+                    ) : 'Start Transformation'}
                   </button>
                 </form>
               </>
@@ -71,22 +102,18 @@ export default function Contact() {
                 className="flex flex-col items-center py-12"
               >
                 <CheckCircle2 className="w-20 h-20 text-brand-accent mb-8" />
-                <h3 className="text-3xl md:text-5xl font-sans font-extrabold text-white mb-6">Inquiry Initiated.</h3>
-                <p className="text-white/70 max-w-sm mb-10 font-light">
-                  Your mail client has been opened. If it didn't trigger, click below to send manually.
+                <h3 className="text-3xl md:text-5xl font-sans font-extrabold text-white mb-6">Inquiry Received.</h3>
+                <p className="text-white/70 max-w-sm mb-10 font-light text-center">
+                  We've received your transformation request. Our team will review your profile and reach out via <span className="text-brand-accent font-medium">{email}</span> within 24 hours.
                 </p>
-                <a 
-                  href={`mailto:hello@inflectionpartners.io?subject=Strategic Transformation Inquiry&body=Work Email: ${email}`}
-                  className="px-8 py-4 border border-brand-accent/30 text-brand-accent rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-brand-accent/5 transition-all"
-                >
-                  Send Manually
-                </a>
-                <button 
-                  onClick={() => setSubmitted(false)}
-                  className="mt-8 text-white/30 text-[10px] uppercase tracking-widest hover:text-white transition-colors"
-                >
-                  Go Back
-                </button>
+                <div className="flex flex-col gap-4 w-full max-w-xs">
+                  <button 
+                    onClick={() => setSubmitted(false)}
+                    className="px-8 py-4 border border-brand-accent/30 text-brand-accent rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-brand-accent/5 transition-all w-full"
+                  >
+                    Send Another message
+                  </button>
+                </div>
               </motion.div>
             )}
           </motion.div>
